@@ -9,8 +9,8 @@ const Logo = (props) => {
             <path d="M20.2581 13.0337C20.1456 13.0337 20.0331 12.9904 19.9471 12.9036C19.7754 12.7301 19.7754 12.4488 19.9471 12.2753L22.226 9.97292C22.3084 9.88966 22.4203 9.84277 22.5369 9.84277C22.6536 9.84277 22.7654 9.88952 22.8479 9.97292L25.1045 12.2529C25.2762 12.4264 25.2762 12.7077 25.1045 12.8812C24.9327 13.0546 24.6543 13.0547 24.4826 12.8812L22.5368 10.9155L20.569 12.9036C20.4831 12.9904 20.3706 13.0337 20.2581 13.0337Z" fill="white" />
             <defs>
                 <linearGradient id="paint0_linear_150_362" x1="25.8733" y1="26.3337" x2="7.51325" y2="4.9008" gradientUnits="userSpaceOnUse">
-                    <stop stop-color="#52D67A" />
-                    <stop offset="1" stop-color="#5AEE87" />
+                    <stop stopColor="#52D67A" />
+                    <stop offset="1" stopColor="#5AEE87" />
                 </linearGradient>
             </defs>
         </svg>
@@ -37,7 +37,7 @@ const Currency = () => {
 const Arrow = () => {
     return (
         <svg width="8" height="4" viewBox="0 0 8 4" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M1 0.5L4 3.5L7 0.5" stroke="black" stroke-linecap="round" stroke-linejoin="round" />
+            <path d="M1 0.5L4 3.5L7 0.5" stroke="black" strokeLinecap="round" strokeLinejoin="round" />
         </svg>
     )
 }

@@ -9,15 +9,8 @@ query{
         name,
         inStock,
         gallery,
-        description,
-        category,
         attributes{
           name,
-          type,
-          items{
-            displayValue,
-            value
-          }
         },
         prices{
           amount,

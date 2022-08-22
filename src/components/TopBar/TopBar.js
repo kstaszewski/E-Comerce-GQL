@@ -1,14 +1,25 @@
 import React from "react";
 import css from "./TopBar.module.css";
-import { Logo, Currency, Cart, Arrow } from "./TopBar.module.svgs"
+import { Logo, Currency, Cart, Arrow, ArrowUp } from "./TopBar.module.svgs"
 import { Outlet } from "react-router-dom";
+import { Link } from "react-router-dom";
+import withRouter from "../withRouter/withRouter";
 
-export default class TopBar extends React.Component {
+class TopBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            categoriesArray: props.categoriesArray
+            categoriesArray: props.categoriesArray,
+            active: "all",
+            currencyDisplayed: false,
+            currencies: ["USD", "EUR", "JPY"]
         };
+    }
+    componentDidUpdate() {
+        if (this.props.params.category !== this.state.active && this.props.params.category)
+            this.setState({
+                active: this.props.params.category,
+            })
     }
 
     render() {
@@ -19,9 +30,9 @@ export default class TopBar extends React.Component {
                         {
                             this.props.categories.map((item, index) => {
                                 return (
-                                    <button className={css.topBar_categories_item} key={index} onClick={this.props.onClick}>
+                                    <Link to={`/${item.toLowerCase()}`} className={(this.state.active === item.toLowerCase()) ? css.active : ""} id={item} key={index}>
                                         <p>{item}</p>
-                                    </button>
+                                    </Link>
                                 )
                             })
                         }
@@ -30,17 +41,27 @@ export default class TopBar extends React.Component {
                         <Logo />
                     </div>
                     <div className={css.topBar__rightSide}>
-                        <button className={css.topBar__currency}>
+                        <button className={css.topBar__currency} onMouseEnter={() => this.setState({ currencyDisplayed: true })} onMouseLeave={() => this.setState({ currencyDisplayed: false })}>
                             <Currency />
-                            <Arrow />
+                            {this.state.currencyDisplayed ? <ArrowUp/> : <Arrow />}
+                            < div style={{}} className={css.topBar__currencyMenu}>
+                                {this.state.currencies.map((currency, index) => {
+                                    return (
+                                        <div className={css.currency} index={index} id={currency}>
+                                            <p>{currency}</p>
+                                        </div>
+                                    )
+                                })}
+                            </div>
                         </button>
                         <button className={css.topBar__cart}>
                             <Cart />
                         </button>
                     </div>
-                </header>
+                </header >
                 <Outlet />
             </>
         );
     }
 }
+export default withRouter(TopBar)

@@ -1,3 +1,37 @@
-h2{
+h2 {
     margin-left: 93px;
+}
+
+.products {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-evenly;
+    column-gap: 40px;
+    row-gap: 103px;
+    margin-left: 100px;
+    margin-right: 100px;
+}
+
+.product {
+    flex: 1 0 21%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 16px;
+    height: 21vw;
+    box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
+}
+
+.product div {
+    align-self: flex-start;
+}
+
+img {
+    display: block;
+    margin: auto;
+    max-width: 90%;
+    max-height: 80%;
 }

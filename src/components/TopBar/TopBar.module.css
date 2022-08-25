@@ -69,30 +69,41 @@ nav a:focus::after,
     column-gap: 22px;
 }
 
-.topBar__rightSide .topBar__currency svg:nth-child(2) {
-    position:relative;
-    display: inline-block;
-    transform: translateY(-11px);
+.topBar__currency{
+    position: relative;
+    display: block;
+}
+
+.topBar__currency div:first-child{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 5px
+}
+
+.currency_symbol{
+    font-size: 18px;
+    width:20px;
+    text-align: left;
 }
 
 .topBar__currencyMenu {
     display: none;
     position: absolute;
+    width: max-content;
+    transform: translateX(-15px);
     background-color: #fff;
     box-shadow: 0px 4px 35px rgba(168, 172, 176, 0.19);
     z-index: 1;
 }
 
-.topBar__currency:hover{
+.topBar__currency:hover .topBar__currencyMenu{
+    display: block;
     
 }
 
-.topBar__currency:hover .topBar__currencyMenu{
-    display: block;
-}
-
 .currency {
-    padding: 10px 40px 10px 20px;
+    padding: 10px 30px 10px 10px;
     font-size: 1.125rem;
 }
 .currency:hover{

@@ -4,6 +4,8 @@ import { Logo, Currency, Cart, Arrow, ArrowUp } from "./TopBar.module.svgs"
 import { Outlet } from "react-router-dom";
 import { Link } from "react-router-dom";
 import withRouter from "../withRouter/withRouter";
+import { Client } from '../../GraphQl/Client';
+import { GET_CURRENCIES_DATA } from "../../GraphQl/Queries"
 
 class TopBar extends React.Component {
     constructor(props) {
@@ -12,8 +14,19 @@ class TopBar extends React.Component {
             categoriesArray: props.categoriesArray,
             active: "all",
             currencyDisplayed: false,
-            currencies: ["USD", "EUR", "JPY"]
+            currencies: [],
+            activeCurrency: {}
         };
+    }
+
+    componentDidMount() {
+        Client.query({
+            query: GET_CURRENCIES_DATA,
+        }).then(res => {
+            this.setState({ currencies: res.data.currencies })
+            this.setState({ activeCurrency: res.data.currencies[0] })
+            this.props.currencyChange(res.data.currencies[0])
+        })
     }
     componentDidUpdate() {
         if (this.props.params.category !== this.state.active && this.props.params.category)
@@ -42,13 +55,15 @@ class TopBar extends React.Component {
                     </div>
                     <div className={css.topBar__rightSide}>
                         <button className={css.topBar__currency} onMouseEnter={() => this.setState({ currencyDisplayed: true })} onMouseLeave={() => this.setState({ currencyDisplayed: false })}>
-                            <Currency />
-                            {this.state.currencyDisplayed ? <ArrowUp/> : <Arrow />}
-                            < div style={{}} className={css.topBar__currencyMenu}>
+                            <div>
+                                <p className={css.currency_symbol}>{this.state.activeCurrency.symbol}</p>
+                                {this.state.currencyDisplayed ? <ArrowUp /> : <Arrow />}
+                            </div>
+                            <div style={{}} className={css.topBar__currencyMenu}>
                                 {this.state.currencies.map((currency, index) => {
                                     return (
-                                        <div className={css.currency} index={index} id={currency}>
-                                            <p>{currency}</p>
+                                        <div className={css.currency} index={index} id={currency.label} onClick={(e) => { this.setState({ activeCurrency: currency }); this.props.currencyChange(currency) }}>
+                                            <p>{`${currency.symbol} ${currency.label}`}</p>
                                         </div>
                                     )
                                 })}

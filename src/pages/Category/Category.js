@@ -10,9 +10,9 @@ class Category extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            thingsToDisplay:[],
+            thingsToDisplay: [],
             products: [],
-            selectedCategory: "all",
+            selectedCategory: "",
             selectedCurrency: "USD",
         };
     }
@@ -30,16 +30,19 @@ class Category extends React.Component {
             this.props.categoryToTopBar(fechedCategoriesArray)
             this.setState({
                 thingsToDisplay: fechedThingsToDisplay,
+                selectedCategory: this.props.params.category,
             });
         })
     }
     componentDidUpdate() {
         if (this.props.currencyToCategory.label !== this.state.selectedCurrency) this.setState({ selectedCurrency: this.props.currencyToCategory.label })
-        if (this.props.params.category !== this.state.selectedCategory && this.props.params.category)
+
+        if (this.props.params.category !== this.state.selectedCategory)
             this.setState({
                 selectedCategory: this.props.params.category,
                 products: [],
             })
+
         if (this.state.products.length !== 0) return
         this.state.thingsToDisplay.forEach(element => {
             if (element.category.toUpperCase() === this.state.selectedCategory.toUpperCase()) {

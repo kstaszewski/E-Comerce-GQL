@@ -2,7 +2,7 @@ import React from "react";
 import css from "./TopBar.module.css";
 import { Logo, Currency, Cart, Arrow, ArrowUp } from "./TopBar.module.svgs"
 import { Outlet } from "react-router-dom";
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import withRouter from "../withRouter/withRouter";
 import { Client } from '../../GraphQl/Client';
 import { GET_CURRENCIES_DATA } from "../../GraphQl/Queries"
@@ -29,10 +29,10 @@ class TopBar extends React.Component {
         })
     }
     componentDidUpdate() {
-        if (this.props.params.category !== this.state.active && this.props.params.category)
-            this.setState({
-                active: this.props.params.category,
-            })
+        // if (this.props.params.category !== this.state.active && this.props.params.category)
+        //     this.setState({
+        //         active: this.props.params.category,
+        //     })
     }
 
     render() {
@@ -43,9 +43,9 @@ class TopBar extends React.Component {
                         {
                             this.props.categories.map((item, index) => {
                                 return (
-                                    <Link to={`/${item.toLowerCase()}`} className={(this.state.active === item.toLowerCase()) ? css.active : ""} id={item} key={index}>
+                                    <NavLink className={({ isActive }) => { return isActive ? css.active : "" }} to={`/${item.toLowerCase()}`} id={item} key={index}>
                                         <p>{item}</p>
-                                    </Link>
+                                    </NavLink>
                                 )
                             })
                         }
@@ -62,7 +62,7 @@ class TopBar extends React.Component {
                             <div style={{}} className={css.topBar__currencyMenu}>
                                 {this.state.currencies.map((currency, index) => {
                                     return (
-                                        <div className={css.currency} index={index} id={currency.label} onClick={(e) => { this.setState({ activeCurrency: currency }); this.props.currencyChange(currency) }}>
+                                        <div className={css.currency} key={index} id={currency.label} onClick={(e) => { this.setState({ activeCurrency: currency }); this.props.currencyChange(currency) }}>
                                             <p>{`${currency.symbol} ${currency.label}`}</p>
                                         </div>
                                     )

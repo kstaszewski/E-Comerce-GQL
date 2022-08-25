@@ -3,17 +3,36 @@ import css from "./Category.module.css";
 import { Cart } from "./Category.module.svgs"
 import { Link, NavLink } from "react-router-dom";
 import withRouter from "../../components/withRouter/withRouter";
+import { Client } from '../../GraphQl/Client';
+import { GET_BEGINING_DATA } from '../../GraphQl/Queries';
 
 class Category extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            thingsToDisplay:[],
             products: [],
             selectedCategory: "all",
             selectedCurrency: "USD",
         };
     }
-
+    componentDidMount() {
+        Client.query({
+            query: GET_BEGINING_DATA,
+        }).then(result => {
+            console.log(result);
+            let fechedCategoriesArray = [];
+            let fechedThingsToDisplay = [];
+            result.data.categories.forEach(element => {
+                fechedCategoriesArray.push(element.name.toUpperCase());
+                fechedThingsToDisplay.push({ category: element.name, products: element.products })
+            });
+            this.props.categoryToTopBar(fechedCategoriesArray)
+            this.setState({
+                thingsToDisplay: fechedThingsToDisplay,
+            });
+        })
+    }
     componentDidUpdate() {
         if (this.props.currencyToCategory.label !== this.state.selectedCurrency) this.setState({ selectedCurrency: this.props.currencyToCategory.label })
         if (this.props.params.category !== this.state.selectedCategory && this.props.params.category)
@@ -22,7 +41,7 @@ class Category extends React.Component {
                 products: [],
             })
         if (this.state.products.length !== 0) return
-        this.props.thingsToDisplay.forEach(element => {
+        this.state.thingsToDisplay.forEach(element => {
             if (element.category.toUpperCase() === this.state.selectedCategory.toUpperCase()) {
                 this.setState({
                     products: element.products,
@@ -33,7 +52,7 @@ class Category extends React.Component {
 
     render() {
         return (
-            <>{this.props.thingsToDisplay &&
+            <>{this.state.thingsToDisplay &&
                 <div className={css.container}>
                     <h2>{this.state.selectedCategory.toUpperCase()}</h2>
                     <div className={css.products}>

@@ -8,7 +8,6 @@ import Category from './pages/Category/Category';
 import Product from './pages/Product/Product';
 class App extends React.Component {
   state = {
-    categoriesArray: [],
     chosenCurrency: {},
   }
 
@@ -16,14 +15,12 @@ class App extends React.Component {
     return (
       <Routes>
         <Route element={<TopBar
-          categories={this.state.categoriesArray}
           currencyChange={(e) => this.setState({ chosenCurrency: e })} />}>
 
           <Route index element={<Navigate to={`/all`} />} />
 
           <Route path='/:category' element={<Category
             currencyToCategory={this.state.chosenCurrency}
-            categoryToTopBar={(e) => this.setState({ categoriesArray: e })}
           />}
           />
 

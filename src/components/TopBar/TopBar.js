@@ -5,13 +5,13 @@ import { Outlet } from "react-router-dom";
 import { NavLink } from "react-router-dom";
 import withRouter from "../withRouter/withRouter";
 import { Client } from '../../GraphQl/Client';
-import { GET_CURRENCIES_DATA } from "../../GraphQl/Queries"
+import { GET_TOPBAR_DATA } from "../../GraphQl/Queries"
 
 class TopBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            categoriesArray: props.categoriesArray,
+            categoriesArray: [],
             active: "all",
             currencyDisplayed: false,
             currencies: [],
@@ -21,18 +21,23 @@ class TopBar extends React.Component {
 
     componentDidMount() {
         Client.query({
-            query: GET_CURRENCIES_DATA,
+            query: GET_TOPBAR_DATA,
         }).then(res => {
-            this.setState({ currencies: res.data.currencies })
-            this.setState({ activeCurrency: res.data.currencies[0] })
+            this.setState(() => {
+                let arr = [];
+                res.data.categories.forEach(category => {
+                    if (category.products.length > 0) arr.push(category.name.toUpperCase())
+                })
+                return (
+                    { currencies: res.data.currencies, activeCurrency: res.data.currencies[0], categoriesArray: arr }
+                )
+            })
             this.props.currencyChange(res.data.currencies[0])
+
         })
     }
     componentDidUpdate() {
-        // if (this.props.params.category !== this.state.active && this.props.params.category)
-        //     this.setState({
-        //         active: this.props.params.category,
-        //     })
+
     }
 
     render() {
@@ -41,7 +46,7 @@ class TopBar extends React.Component {
                 <header >
                     <nav>
                         {
-                            this.props.categories.map((item, index) => {
+                            this.state.categoriesArray.map((item, index) => {
                                 return (
                                     <NavLink className={({ isActive }) => { return isActive ? css.active : "" }} to={`/${item.toLowerCase()}`} id={item} key={index}>
                                         <p>{item}</p>

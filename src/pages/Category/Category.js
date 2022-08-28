@@ -27,7 +27,6 @@ class Category extends React.Component {
                 fechedCategoriesArray.push(element.name.toUpperCase());
                 fechedThingsToDisplay.push({ category: element.name, products: element.products })
             });
-            this.props.categoryToTopBar(fechedCategoriesArray)
             this.setState({
                 thingsToDisplay: fechedThingsToDisplay,
                 selectedCategory: this.props.params.category,
@@ -61,7 +60,7 @@ class Category extends React.Component {
                     <div className={css.products}>
                         {this.state.products.map((product, index) => {
                             return (
-                                <Link className={css.product} id={product.id} key={index} to={`/product/${product.id}`} state={{}}>
+                                <Link className={css.product} id={product.id} key={index} to={`/product/${product.id}`}>
                                     {product.inStock === false &&
                                         <div className={css.product_unavalible}>
                                             <p>OUT OF STOCK</p>

@@ -20,7 +20,6 @@ class Category extends React.Component {
         Client.query({
             query: GET_BEGINING_DATA,
         }).then(result => {
-            console.log(result);
             let fechedCategoriesArray = [];
             let fechedThingsToDisplay = [];
             result.data.categories.forEach(element => {

@@ -24,7 +24,7 @@ class App extends React.Component {
           />}
           />
 
-          <Route path='/product/:id' element={<Product />}
+          <Route path='/product/:id' element={<Product currencyToProduct={this.state.chosenCurrency} />}
           />
 
         </Route>

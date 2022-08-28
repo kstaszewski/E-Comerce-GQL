@@ -7,7 +7,11 @@ h1 {
 h2 {
     font-size: 30px;
     font-weight: 400;
-    margin: 16px 0 0 0
+}
+
+#subtitle {
+    margin-left: 0;
+    margin-bottom: 43px;
 }
 
 .container {
@@ -45,4 +49,66 @@ h2 {
 
 .infoContainer {
     grid-column: 3;
+}
+
+.textAttribute,
+.swatchAttribute {
+    display: block;
+    font-size: 1.125rem;
+    font-weight: 700;
+    margin: 24px 0
+}
+
+.textAttribute_itemsContainer,
+.swatchAttribute_itemsContainer {
+    display: flex;
+    gap: 12px;
+
+}
+
+.textAttribute_item {
+    display: flex;
+    padding: 13px 22px;
+    border: 1px solid #1D1F22;
+    cursor: pointer;
+}
+
+.selectedTextAttribute {
+    background-color: #000;
+    color: #fff
+}
+
+.swatchAttribute_item {
+    display: flex;
+    padding: 31px 31px;
+    border: 1px solid #1D1F22;
+}
+
+.selectedSwatchAttribute {
+    padding: 28px 28px;
+    border: 3px solid #5ECE7B
+}
+
+.price{
+    margin-top: 38px;
+    font-size: 1.125rem;
+    font-weight: 700;
+}
+
+.price p:nth-child(2){
+    margin-top: 10px;
+    font-size: 1.5rem;
+}
+
+.addToChart{
+    display: flex;
+    justify-content: center;
+    justify-items: center;
+    max-width: 50%;
+    margin-top: 20px;
+    padding: 16px 32px;
+    font-weight: 600;
+    line-height: 120%;
+    color:#ffff;
+    background-color: #5ECE7B;
 }

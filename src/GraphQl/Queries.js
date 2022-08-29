@@ -58,7 +58,8 @@ product(id: $idToPass){
     amount
   },
   gallery,
-  description
+  description,
+  inStock
 }
 }
 `;

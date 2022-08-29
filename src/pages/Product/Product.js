@@ -1,31 +1,32 @@
-import React from "react";
-import css from "./Product.module.css"
+import React, {useEffect} from "react";
+import css from "./Product.module.css";
 import withRouter from "../../components/withRouter/withRouter";
-import { GET_PRODUCT_DATA } from '../../GraphQl/Queries'
-import { Client } from '../../GraphQl/Client';
-import { gql } from '@apollo/client'
+import {GET_PRODUCT_DATA} from '../../GraphQl/Queries';
+import {Client} from '../../GraphQl/Client';
+import {gql} from '@apollo/client';
 
 class Product extends React.Component {
-    constructor() {
+    constructor () {
         super();
         this.state = {
             productData: undefined,
             selectedPhoto: "",
             selectedAttributes: undefined,
             selectedCurrency: "",
-        }
+            cart: JSON.parse(localStorage.getItem("cart")) || [],
+        };
     }
 
-    componentDidMount() {
+    componentDidMount () {
         Client.query({
             query: gql`${GET_PRODUCT_DATA.replace('$idToPass', `"${this.props.params.id.toString()}"`)}`
         }).then(res => {
-            console.log(res.data.product)
+            console.log(res.data.product);
             this.setState(() => {
-                let atr = {}
+                let atr = {};
                 res.data.product.attributes.forEach(attribute => {
-                    atr[attribute.name] = undefined;
-                })
+                    atr[attribute.name] = 'notChosen';
+                });
                 return (
                     {
                         productData: res.data.product,
@@ -33,16 +34,45 @@ class Product extends React.Component {
                         selectedAttributes: atr,
                         selectedCurrency: this.props.currencyToProduct.label,
                     }
-                )
-            })
-        })
+                );
+            });
+        });
     }
 
-    componentDidUpdate() {
-        if (this.props.currencyToProduct.label !== this.state.selectedCurrency) this.setState({ selectedCurrency: this.props.currencyToProduct.label })
+    componentDidUpdate () {
+        if (this.props.currencyToProduct.label !== this.state.selectedCurrency) this.setState({selectedCurrency: this.props.currencyToProduct.label});
     }
 
-    render() {
+    render () {
+
+        const shallowEqual = (object1, object2) => {
+            const keys1 = Object.keys(object1);
+            const keys2 = Object.keys(object2);
+            if (keys1.length !== keys2.length) {
+                return false;
+            }
+            for (let key of keys1) {
+                if (object1[key] !== object2[key]) {
+                    return false;
+                }
+            }
+            return true;
+        };
+
+        const saveCart = data => {
+            let newCart = [...this.state.cart];
+            console.log(newCart);
+            const existsIndex = this.state.cart.findIndex(item => (item.name === data.name && shallowEqual(item.attributes, data.attributes)));
+            if (existsIndex !== -1) {
+                newCart[existsIndex].quantity += 1;
+            } else {
+                data.quantity = 1;
+                newCart.push(data);
+            }
+            this.setState({cart: newCart});
+            localStorage.setItem("cart", JSON.stringify(newCart));
+            this.props.forceUpdate()
+        };
         return (
             <>
                 {this.state.productData &&
@@ -51,10 +81,10 @@ class Product extends React.Component {
                             <div className={css.photoContainer_thumbnails}>
 
                                 {this.state.productData.gallery.map((photo, index) => {
-                                    if (this.state.productData.gallery.length <= 1) return
+                                    if (this.state.productData.gallery.length <= 1) return;
                                     return (
-                                        <img src={photo} key={index} alt="" onClick={() => this.setState({ selectedPhoto: photo })} />
-                                    )
+                                        <img src={photo} key={index} alt="" onClick={() => this.setState({selectedPhoto: photo})} />
+                                    );
                                 })}
                             </div>
                             <div className={css.photoContainer_photo}>
@@ -72,16 +102,16 @@ class Product extends React.Component {
                                             <div className={css.textAttribute_itemsContainer}>
                                                 {attribute.items.map((item, index) => {
                                                     return (
-                                                        <div className={
-                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString()) ? (css.textAttribute_item + " " + css.selectedTextAttribute) : css.textAttribute_item
-                                                        } key={index} onClick={() => this.setState({ selectedAttributes: { ...this.state.selectedAttributes, [attribute.name]: item.value } })}>
+                                                        <div className={css.textAttribute_item + " " +
+                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString() ? (css.selectedTextAttribute) : null)
+                                                        } key={index} onClick={() => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: item.value}})}>
                                                             <p>{item.displayValue}</p>
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 } else {
                                     return (
                                         <div className={css.swatchAttribute} key={index}>
@@ -89,16 +119,15 @@ class Product extends React.Component {
                                             <div className={css.swatchAttribute_itemsContainer}>
                                                 {attribute.items.map((item, index) => {
                                                     return (
-                                                        <div style={{ "backgroundColor": item.value }} className={
-                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString()) ? (css.swatchAttribute_item + " " + css.selectedSwatchAttribute) : css.swatchAttribute_item
-                                                        } key={index} onClick={() => this.setState({ selectedAttributes: { ...this.state.selectedAttributes, [attribute.name]: item.value } })}>
-                                                            {/* <div /> */}
+                                                        <div style={{"backgroundColor": item.value}} className={css.swatchAttribute_item + " " +
+                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString() ? css.selectedSwatchAttribute : null)
+                                                        } key={index} onClick={() => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: item.value}})}>
                                                         </div>
-                                                    )
+                                                    );
                                                 })}
                                             </div>
                                         </div>
-                                    )
+                                    );
                                 }
                             })}
                             <div className={css.price}>
@@ -109,14 +138,23 @@ class Product extends React.Component {
                                     }
                                 })}</p>
                             </div>
-                            <div className={css.addToChart}>
-                                <p>ADD TO CHART</p>
+                            <div className={css.addToChart + " " + ((!this.state.productData.inStock || Object.values(this.state.selectedAttributes).find(x => x === 'notChosen')) ? css.addToChartDisabled : null)} onClick={() => {
+                                if (!this.state.productData.inStock || Object.values(this.state.selectedAttributes).find(x => x === 'notChosen')) return;
+                                saveCart({
+                                    name: this.state.productData.name,
+                                    brand: this.state.productData.brand,
+                                    prices: this.state.productData.prices,
+                                    gallery: this.state.productData.gallery,
+                                    attributes: this.state.selectedAttributes
+                                });
+                            }}>
+                                <p>{this.state.productData.inStock ? Object.values(this.state.selectedAttributes).find(x => x === 'notChosen') ? "SELECT ALL ATTRIBUTES" : "TO CHART" : "OUT OF STOCK"}</p>
                             </div>
                         </div>
                     </div>
                 }
             </>
-        )
+        );
     }
 }
-export default withRouter(Product)
+export default withRouter(Product);

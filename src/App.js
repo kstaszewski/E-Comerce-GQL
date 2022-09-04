@@ -10,20 +10,16 @@ import Cart from './pages/Cart/Cart';
 class App extends React.Component {
   state = {
     chosenCurrency: {},
-    cart: localStorage.getItem("cart") || [],
+    cart: JSON.parse(localStorage.getItem("cart")) || [],
   };
 
-
   componentDidUpdate (prevProps, prevState) {
-    if (JSON.stringify(this.state.cart) !== localStorage.getItem("cart")) {
+    if (localStorage.getItem("cart") && (JSON.stringify(this.state.cart) !== localStorage.getItem("cart"))) {
       this.setState({cart: JSON.parse(localStorage.getItem('cart'))});
     }
-
   }
 
   render () {
-
-
     return (
       <Routes>
         <Route element={<TopBar
@@ -33,19 +29,21 @@ class App extends React.Component {
           <Route index element={<Navigate to={`/all`} />} />
 
           <Route path='/:category' element={<Category
-            currencyToCategory={this.state.chosenCurrency}
+            currencyPass={this.state.chosenCurrency}
             forceUpdate={() => this.forceUpdate()}
           />}
           />
 
           <Route path='/product/:id' element={<Product
-            currencyToProduct={this.state.chosenCurrency}
+            currencyPass={this.state.chosenCurrency}
             forceUpdate={() => this.forceUpdate()}
           />}
           />
 
           <Route path='/cart' element={<Cart
+            currencyPass={this.state.chosenCurrency}
             cart={this.state.cart}
+            forceUpdate={() => this.forceUpdate()}
           />}
           />
         </Route>

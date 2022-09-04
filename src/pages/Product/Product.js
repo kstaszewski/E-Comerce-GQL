@@ -32,7 +32,7 @@ class Product extends React.Component {
                         productData: res.data.product,
                         selectedPhoto: res.data.product.gallery[0],
                         selectedAttributes: atr,
-                        selectedCurrency: this.props.currencyToProduct.label,
+                        selectedCurrency: this.props.currencyPass.label,
                     }
                 );
             });
@@ -40,7 +40,7 @@ class Product extends React.Component {
     }
 
     componentDidUpdate () {
-        if (this.props.currencyToProduct.label !== this.state.selectedCurrency) this.setState({selectedCurrency: this.props.currencyToProduct.label});
+        if (this.props.currencyPass.label !== this.state.selectedCurrency) this.setState({selectedCurrency: this.props.currencyPass.label});
     }
 
     render () {
@@ -61,8 +61,7 @@ class Product extends React.Component {
 
         const saveCart = data => {
             let newCart = [...this.state.cart];
-            console.log(newCart);
-            const existsIndex = this.state.cart.findIndex(item => (item.name === data.name && shallowEqual(item.attributes, data.attributes)));
+            const existsIndex = this.state.cart.findIndex(item => (item.name === data.name && shallowEqual(item.selectedAttributes, data.selectedAttributes)));
             if (existsIndex !== -1) {
                 newCart[existsIndex].quantity += 1;
             } else {
@@ -145,7 +144,8 @@ class Product extends React.Component {
                                     brand: this.state.productData.brand,
                                     prices: this.state.productData.prices,
                                     gallery: this.state.productData.gallery,
-                                    attributes: this.state.selectedAttributes
+                                    selectedAttributes: this.state.selectedAttributes,
+                                    attributes: this.state.productData.attributes
                                 });
                             }}>
                                 <p>{this.state.productData.inStock ? Object.values(this.state.selectedAttributes).find(x => x === 'notChosen') ? "SELECT ALL ATTRIBUTES" : "TO CHART" : "OUT OF STOCK"}</p>

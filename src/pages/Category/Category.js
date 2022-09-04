@@ -33,7 +33,7 @@ class Category extends React.Component {
         })
     }
     componentDidUpdate() {
-        if (this.props.currencyToCategory.label !== this.state.selectedCurrency) this.setState({ selectedCurrency: this.props.currencyToCategory.label })
+        if (this.props.currencyPass.label !== this.state.selectedCurrency) this.setState({ selectedCurrency: this.props.currencyPass.label })
 
         if (this.props.params.category !== this.state.selectedCategory)
             this.setState({

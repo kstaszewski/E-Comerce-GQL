@@ -69,21 +69,21 @@ nav a:focus::after,
     column-gap: 22px;
 }
 
-.topBar__currency{
+.topBar__currency {
     position: relative;
     display: block;
 }
 
-.topBar__currency div:first-child{
+.topBar__currency div:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 5px
 }
 
-.currency_symbol{
+.currency_symbol {
     font-size: 18px;
-    width:20px;
+    width: 20px;
     text-align: left;
 }
 
@@ -97,15 +97,41 @@ nav a:focus::after,
     z-index: 1;
 }
 
-.topBar__currency:hover .topBar__currencyMenu{
+.topBar__currency:hover .topBar__currencyMenu {
     display: block;
-    
+
 }
 
 .currency {
     padding: 10px 30px 10px 10px;
     font-size: 1.125rem;
 }
-.currency:hover{
+
+.currency:hover {
     background-color: #EEE;
+}
+
+.topBar__cart{
+    position: relative;
+}
+
+.topBar__cartIndicator {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    top: -11px;
+    left: 11px;
+    border-radius: 1000px;
+    background-color: #000;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    z-index: 0;
+}
+
+.inactive{
+    display: none;
 }

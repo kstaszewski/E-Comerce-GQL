@@ -2,10 +2,33 @@
     margin-top: 0;
     margin-bottom: 55px;
     font-size: 30px;
-    font-weight: 400;
+    font-weight: 700;
 }
 
-.container{
+.container {
     margin: 80px 100px 0 100px;
 }
 
+.priceInfo {
+    display: flex;
+    column-gap: 1ch;
+    margin-top: 32px;
+    font-size: 1.5rem;
+    font-weight: 400;
+}
+
+.priceInfo div {
+    display: flex;
+    flex-direction: column;
+}
+
+.priceInfo div:nth-child(2) {
+    font-weight: 700;
+}
+
+.container a p{
+    display:inline-block;
+    margin: 13px 0;
+    padding: 13px 115px;
+    background-color: #5ECE7B;
+}

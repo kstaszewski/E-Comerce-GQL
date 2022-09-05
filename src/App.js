@@ -24,7 +24,9 @@ class App extends React.Component {
       <Routes>
         <Route element={<TopBar
           currencyChange={(e) => this.setState({chosenCurrency: e})}
-          cart={this.state.cart} />}>
+          cart={this.state.cart}
+          forceUpdate={() => this.forceUpdate()}
+        />}>
 
           <Route index element={<Navigate to={`/all`} />} />
 

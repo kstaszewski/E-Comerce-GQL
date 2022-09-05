@@ -56,25 +56,25 @@ nav a:focus::after,
     transform: translateY(23px);
 }
 
-.topBar__logo {
+.logo {
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.topBar__rightSide {
+.rightSide {
     display: flex;
     align-items: center;
     justify-content: flex-end;
     column-gap: 22px;
 }
 
-.topBar__currency {
+.currency {
     position: relative;
     display: block;
 }
 
-.topBar__currency div:first-child {
+.currency div:first-child {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -87,7 +87,7 @@ nav a:focus::after,
     text-align: left;
 }
 
-.topBar__currencyMenu {
+.currencyMenu {
     display: none;
     position: absolute;
     width: max-content;
@@ -97,9 +97,8 @@ nav a:focus::after,
     z-index: 1;
 }
 
-.topBar__currency:hover .topBar__currencyMenu {
+.currency:hover .currencyMenu {
     display: block;
-
 }
 
 .currency {
@@ -111,11 +110,12 @@ nav a:focus::after,
     background-color: #EEE;
 }
 
-.topBar__cart{
+.cart {
     position: relative;
+    display: block;
 }
 
-.topBar__cartIndicator {
+.cartIndicator {
     position: absolute;
     display: flex;
     align-items: center;
@@ -132,6 +132,44 @@ nav a:focus::after,
     z-index: 0;
 }
 
-.inactive{
+.inactive {
     display: none;
+}
+
+.cartOverlay {
+    display: block;
+    position: absolute;
+    width: max-content;
+    max-height: 50vh;
+    overflow: auto;
+    transform: translateX(-400px);
+    background-color: #fff;
+    z-index: 2;
+}
+
+.cartOverlayTitle:first-child{
+    margin: 50px 0 32px 16px;
+    font-weight: 700;
+    font-size: 1rem;
+}
+
+.cartOverlayTitle:nth-child(2){
+    margin: 50px 0 32px 0;
+    font-weight: 500;
+    font-size: 1rem;
+}
+
+.cartOverlayBackgroud {
+    display: none;
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    height: calc(100% - 80px);
+    background: rgba(57, 55, 72, 0.22);
+    z-index: 1;
+}
+
+.cart:hover .cartOverlay {
+    display: block;
 }

@@ -21,7 +21,6 @@ class Product extends React.Component {
         Client.query({
             query: gql`${GET_PRODUCT_DATA.replace('$idToPass', `"${this.props.params.id.toString()}"`)}`
         }).then(res => {
-            console.log(res.data.product);
             this.setState(() => {
                 let atr = {};
                 res.data.product.attributes.forEach(attribute => {
@@ -104,7 +103,7 @@ class Product extends React.Component {
                                                         <div className={css.textAttribute_item + " " +
                                                             (this.state.selectedAttributes[attribute.name] === item.value.toString() ? (css.selectedTextAttribute) : null)
                                                         } key={index} onClick={() => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: item.value}})}>
-                                                            <p>{item.displayValue}</p>
+                                                            <p>{item.value}</p>
                                                         </div>
                                                     );
                                                 })}

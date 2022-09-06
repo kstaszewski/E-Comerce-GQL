@@ -7,15 +7,26 @@ class CartContent extends Component {
         super();
         this.state = {
             selectedImgIndex: {},
+            data: []
         };
     }
 
     componentDidMount () {
         let newState = {};
-        this.props.data.forEach(item => {
-            newState[item.name] = 0;
+        this.props.data.forEach((item, index) => {
+            newState[index] = 0;
         });
-        this.setState({selectedImgIndex: newState});
+        this.setState({selectedImgIndex: newState, data: this.props.data});
+    }
+
+    componentDidUpdate (prevState) {
+        if (prevState.data !== this.props.data) {
+            let newState = {};
+            this.props.data.forEach((item, index) => {
+                newState[index.toString()] = 0;
+            });
+            this.setState({selectedImgIndex: newState, data: this.props.data});
+        }
     }
 
     render () {
@@ -55,11 +66,11 @@ class CartContent extends Component {
             localStorage.setItem("cart", JSON.stringify(newCart));
             this.props.forceUpdate();
         };
-        const handlePrevImage = (e) => {
-            this.setState({selectedImgIndex: {...this.state.selectedImgIndex, [e.name]: (this.state.selectedImgIndex[e.name] === 0) ? (e.gallery.length - 1) : (this.state.selectedImgIndex[e.name] - 1)}});
+        const handlePrevImage = (index, e) => {
+            this.setState({selectedImgIndex: {...this.state.selectedImgIndex, [index]: (this.state.selectedImgIndex[index] === 0) ? (e.gallery.length - 1) : (this.state.selectedImgIndex[index] - 1)}});
         };
-        const handleNextImage = (e) => {
-            this.setState({selectedImgIndex: {...this.state.selectedImgIndex, [e.name]: (this.state.selectedImgIndex[e.name] === (e.gallery.length - 1)) ? 0 : (this.state.selectedImgIndex[e.name] + 1)}});
+        const handleNextImage = (index, e) => {
+            this.setState({selectedImgIndex: {...this.state.selectedImgIndex, [index]: (this.state.selectedImgIndex[index] === (e.gallery.length - 1)) ? 0 : (this.state.selectedImgIndex[index] + 1)}});
         };
         return (
             <>
@@ -79,7 +90,7 @@ class CartContent extends Component {
                                         if (attribute.type === 'text') {
                                             return (
                                                 <div className={(this.props.overlayMode ? (css.textAttribute + " " + css.textAttributeOverlay) : css.textAttribute)} key={index}>
-                                                    <p>{`${attribute.name}:`}</p>
+                                                    <p>{(this.props.overlayMode ? `${attribute.name}:` : `${attribute.name.toUpperCase()}:`)}</p>
                                                     <div className={(this.props.overlayMode ? (css.textAttribute_itemsContainer + " " + css.textAttribute_itemsContainerOverlay) : css.textAttribute_itemsContainer)}>
                                                         {attribute.items.map((item, index) => {
                                                             return (
@@ -96,7 +107,7 @@ class CartContent extends Component {
                                         } else {
                                             return (
                                                 <div className={(this.props.overlayMode ? (css.swatchAttribute + " " + css.swatchAttributeOverlay) : css.swatchAttribute)} key={index}>
-                                                    <p>{`${attribute.name}:`}</p>
+                                                    <p>{(this.props.overlayMode ? `${attribute.name}:` : `${attribute.name.toUpperCase()}:`)}</p>
                                                     <div className={(this.props.overlayMode ? (css.swatchAttribute_itemsContainer + " " + css.swatchAttribute_itemsContainerOverlay) : css.swatchAttribute_itemsContainer)}>
                                                         {attribute.items.map((item, index) => {
                                                             return (
@@ -120,10 +131,10 @@ class CartContent extends Component {
                                     </div>
                                     {element.gallery && <div className={css.photo}>
                                         {(element.gallery.length > 1 && !this.props.overlayMode) && <div className={css.photoNavigation}>
-                                            <PrevImage onClick={() => handlePrevImage(element)} />
-                                            <NextImage onClick={() => handleNextImage(element)} />
+                                            <PrevImage onClick={() => handlePrevImage(index, element)} />
+                                            <NextImage onClick={() => handleNextImage(index, element)} />
                                         </div>}
-                                        <img src={element.gallery[this.state.selectedImgIndex[element.name]]} key={index} alt="" />
+                                        <img src={element.gallery[this.state.selectedImgIndex[index]]} key={index} alt="" />
                                     </div>}
                                 </div>
                             </div>

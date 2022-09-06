@@ -69,7 +69,7 @@ class Product extends React.Component {
             }
             this.setState({cart: newCart});
             localStorage.setItem("cart", JSON.stringify(newCart));
-            this.props.forceUpdate()
+            this.props.forceUpdate();
         };
         return (
             <>
@@ -149,6 +149,7 @@ class Product extends React.Component {
                             }}>
                                 <p>{this.state.productData.inStock ? Object.values(this.state.selectedAttributes).find(x => x === 'notChosen') ? "SELECT ALL ATTRIBUTES" : "TO CHART" : "OUT OF STOCK"}</p>
                             </div>
+                            <div className={css.description} dangerouslySetInnerHTML={{__html: this.state.productData.description}} />
                         </div>
                     </div>
                 }

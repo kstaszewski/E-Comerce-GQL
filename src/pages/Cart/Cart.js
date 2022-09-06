@@ -6,15 +6,8 @@ import CartContent from '../../components/CartContent/CartContent';
 import {Link} from 'react-router-dom';
 
 class Cart extends Component {
-    // constructor (props) {
-    //     super(props);
-    //     this.state = {
-    //         cart: this.props.cart || [],
-    //     };
-    // }
 
     componentDidUpdate () {
-        // if (this.props.cart && JSON.stringify(this.props.cart) !== JSON.stringify(this.state.cart)) this.setState({cart: this.props.cart});
     }
 
     render () {
@@ -48,7 +41,7 @@ class Cart extends Component {
                         </div>
                     </div>
                     <Link to={'#'}>
-                        <p>ORDER</p>
+                        <button type='submit'>ORDER</button>
                     </Link>
                 </div>
             </>

@@ -32,6 +32,7 @@ class App extends React.Component {
 
           <Route path='/:category' element={<Category
             currencyPass={this.state.chosenCurrency}
+            cart={this.state.cart}
             forceUpdate={() => this.forceUpdate()}
           />}
           />

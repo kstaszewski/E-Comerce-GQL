@@ -3,7 +3,7 @@ import css from "./TopBar.module.css";
 import withRouter from "../withRouter/withRouter";
 
 import {Logo, Cart, Arrow, ArrowUp} from "./TopBar.module.svgs";
-import {Outlet} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
 import {NavLink} from "react-router-dom";
 import {Client} from '../../GraphQl/Client';
 import {GET_TOPBAR_DATA} from "../../GraphQl/Queries";
@@ -21,6 +21,7 @@ class TopBar extends React.Component {
             cart: [],
             cartOverlayDisplayed: false,
         };
+        this.currencyRef = React.createRef();
     }
 
     componentDidMount () {
@@ -37,14 +38,33 @@ class TopBar extends React.Component {
                 );
             });
             this.props.currencyChange(res.data.currencies[0]);
-
         });
     }
     componentDidUpdate () {
+        if (this.state.currencyDisplayed) document.addEventListener("mousedown", this.handleClickOutside);
+        else document.removeEventListener("mousedown", this.handleClickOutside);
         if (this.props.cart && JSON.stringify(this.props.cart) !== JSON.stringify(this.state.cart)) this.setState({cart: this.props.cart});
     }
 
+    componentWillUnmount () {
+        document.removeEventListener("mousedown", this.handleClickOutside);
+    }
+
+    handleClickOutside = (event) => {
+        if (this.currencyRef && !this.currencyRef.current.contains(event.target)) {
+            this.setState({currencyDisplayed: false})
+        }
+    };
+
     render () {
+        const totalValue = e => {
+            return this.props.cart.reduce((prev, current) => {
+                const singlePrice = current.prices.filter((el) => {
+                    return el.currency.label === this.state.activeCurrency.label;
+                });
+                return prev + parseFloat(singlePrice[0]?.amount * current.quantity);
+            }, 0);
+        };
         return (
             <>
                 <header >
@@ -63,12 +83,12 @@ class TopBar extends React.Component {
                         <Logo />
                     </div>
                     <div className={css.rightSide}>
-                        <button className={css.currency} onMouseEnter={() => this.setState({currencyDisplayed: true})} onMouseLeave={() => this.setState({currencyDisplayed: false})}>
+                        <button ref={this.currencyRef} className={css.currency} onClick={() => this.setState({currencyDisplayed: !this.state.currencyDisplayed})}>
                             <div>
                                 <p className={css.currency_symbol}>{this.state.activeCurrency.symbol}</p>
                                 {this.state.currencyDisplayed ? <ArrowUp /> : <Arrow />}
                             </div>
-                            <div className={css.currencyMenu}>
+                            <div className={css.currencyMenu} style={{display: this.state.currencyDisplayed ? "block" : "none"}}>
                                 {this.state.currencies.map((currency, index) => {
                                     return (
                                         <div className={css.currency} key={index} id={currency.label} onClick={(e) => {this.setState({activeCurrency: currency}); this.props.currencyChange(currency);}}>
@@ -78,25 +98,37 @@ class TopBar extends React.Component {
                                 })}
                             </div>
                         </button>
-                        <NavLink className={css.cart} to={`/cart`} onMouseEnter={() => this.setState({cartOverlayDisplayed: true})} onMouseLeave={() => this.setState({cartOverlayDisplayed: false})}>
-                            <div className={css.cartIndicator + " " + (this.state.cart.length === 0 ? css.inactive : null)}>
-                                <p>{this.state.cart.reduce((prev, current) => prev + current.quantity,0)}</p>
-                            </div>
-                            <Cart />
-                            <div className={css.cartOverlay}>
-                                <div style={{display: "flex", gap: "1ch"}}>
-                                    <p className={css.cartOverlayTitle}>{`My Bag, `}</p>
-                                    <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity,0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity,0) > 1 ? "items" : "item"}`}</p>
+                        <div className={css.cartWrapper} onMouseEnter={() => this.setState({cartOverlayDisplayed: true})} onMouseLeave={() => this.setState({cartOverlayDisplayed: false})}>
+                            <NavLink className={css.cart} to={`/cart`} >
+                                <div className={css.cartIndicator + " " + (this.state.cart.length === 0 ? css.inactive : null)}>
+                                    <p>{this.state.cart.reduce((prev, current) => prev + current.quantity, 0)}</p>
                                 </div>
-                                <CartContent
-                                    data={this.props.cart}
-                                    currencyPass={this.state.activeCurrency}
-                                    forceUpdate={this.props.forceUpdate}
-                                    overlayMode={true}
-                                />
+                                <Cart />
+                            </NavLink>
+                            <div className={css.cartOverlay}>
+                                <div className={css.cartOverlayInner}>
+                                    <div style={{display: "flex", gap: "1ch"}}>
+                                        <p className={css.cartOverlayTitle}>{`My Bag, `}</p>
+                                        <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity, 0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity, 0) > 1 ? "items" : "item"}`}</p>
+                                    </div>
+                                    <CartContent
+                                        data={this.props.cart}
+                                        currencyPass={this.state.activeCurrency}
+                                        forceUpdate={this.props.forceUpdate}
+                                        overlayMode={true}
+                                    />
+                                    <div className={css.cartTotalPrice}>
+                                        <p>Total</p>
+                                        <p>{this.state.activeCurrency.symbol + (isNaN(totalValue()) ? "" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
+                                    </div>
+                                    <div className={css.cartOverlayButtons}>
+                                        <Link to={'cart'}><button type="button">VIEW BAG</button></Link>
+                                        <Link to={'#'}><button type="submitt">CHECK OUT</button> </Link>
+                                    </div>
+                                </div>
                             </div>
-                        </NavLink>
-                        <div className={css.cartOverlayBackgroud} style={{display: this.state.cartOverlayDisplayed ? "block" : "none"}} />
+                        </div>
+                        <div className={css.cartOverlayBackgroud} style={{display: this.state.cartOverlayDisplayed ? "block" : "none", height: (window.document.body.clientHeight < window.innerHeight) ? window.innerHeight - 80 + 'px' : window.document.body.clientHeight - 80 + 'px'}} />
                     </div>
                 </header >
                 <Outlet />

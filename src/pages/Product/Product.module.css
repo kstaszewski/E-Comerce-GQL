@@ -45,10 +45,6 @@
     align-items: flex-start;
 }
 
-.photoContainer_photo img {
-    margin: 0 0 0 0
-}
-
 .infoContainer {
     grid-column: 3;
 }
@@ -56,9 +52,10 @@
 .textAttribute,
 .swatchAttribute {
     display: block;
+    margin: 24px 0;
+    font-family: 'Roboto Condensed', sans-serif;
     font-size: 1.125rem;
     font-weight: 700;
-    margin: 24px 0
 }
 
 .textAttribute_itemsContainer,
@@ -67,6 +64,8 @@
     align-items: center;
     justify-content: flex-start;
     gap: 12px;
+    font-family: 'Source Sans Pro', sans-serif;
+    font-weight: 400;
 
 }
 
@@ -93,15 +92,16 @@
     outline: 2px solid #5ECE7B;
 }
 
-.price{
-    margin-top: 38px;
-    font-size: 1.125rem;
+.price p{
+    margin-top: 10px;
+    font-size: 1.5rem;
     font-weight: 700;
 }
 
-.price p:nth-child(2){
-    margin-top: 10px;
-    font-size: 1.5rem;
+.price p:first-child{
+    margin-top: 38px;
+    font-family: 'Roboto Condensed', sans-serif;
+    font-size: 1.125rem; 
 }
 
 .addToChart{
@@ -113,10 +113,25 @@
     padding: 16px 32px;
     font-weight: 600;
     line-height: 120%;
+    text-align: center;
     color:#ffff;
     background-color: #5ECE7B;
+    cursor: pointer;
+}
+
+.addToChart:hover{
+    background-color: #4dbd6a;
 }
 
 .addToChartDisabled{
     background-color: #5e5e5e;
+}
+
+.description{
+    max-width: 55%;
+    margin-top: 40px;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    font-weight: 400;
+    
 }

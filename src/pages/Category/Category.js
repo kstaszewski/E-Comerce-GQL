@@ -92,7 +92,7 @@ class Category extends React.Component {
                                             <img src={product.gallery[0]} alt={product.name} />
                                         </div>
                                         <div className={css.productInfo}>
-                                            <p className={css.productName}>{product.name}</p>
+                                            <p className={css.productName}>{`${product.brand} ${product.name}`}</p>
                                             <p className={css.productPrice}>{product.prices.map(price => {
                                                 if (price.currency.label === this.state.selectedCurrency) {
                                                     return (price.currency.symbol + price.amount);

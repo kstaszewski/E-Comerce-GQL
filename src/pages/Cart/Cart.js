@@ -35,9 +35,9 @@ class Cart extends Component {
                             <p>{`Total: `}</p>
                         </div>
                         <div>
-                            <p>{this.props.currencyPass.symbol + (isNaN(totalValue()) ? "" : Math.round((totalValue() * 0.21 + Number.EPSILON) * 100) / 100)}</p>
+                            <p>{this.props.currencyPass.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
                             <p>{this.props.cart.reduce((prev, current) => prev + parseInt(current.quantity), 0)}</p>
-                            <p>{this.props.currencyPass.symbol + (isNaN(totalValue()) ? "" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
+                            <p>{this.props.currencyPass.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
                         </div>
                     </div>
                     <Link to={'#'}>

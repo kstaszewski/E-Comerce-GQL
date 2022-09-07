@@ -52,7 +52,7 @@ class TopBar extends React.Component {
 
     handleClickOutside = (event) => {
         if (this.currencyRef && !this.currencyRef.current.contains(event.target)) {
-            this.setState({currencyDisplayed: false})
+            this.setState({currencyDisplayed: false});
         }
     };
 
@@ -111,15 +111,17 @@ class TopBar extends React.Component {
                                         <p className={css.cartOverlayTitle}>{`My Bag, `}</p>
                                         <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity, 0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity, 0) > 1 ? "items" : "item"}`}</p>
                                     </div>
+                                    {console.log(this.props.cart)}
                                     <CartContent
                                         data={this.props.cart}
                                         currencyPass={this.state.activeCurrency}
                                         forceUpdate={this.props.forceUpdate}
                                         overlayMode={true}
+                                        turnOffOverlayBackground={() => this.setState({cartOverlayDisplayed: false})}
                                     />
                                     <div className={css.cartTotalPrice}>
                                         <p>Total</p>
-                                        <p>{this.state.activeCurrency.symbol + (isNaN(totalValue()) ? "" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
+                                        <p>{this.state.activeCurrency.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
                                     </div>
                                     <div className={css.cartOverlayButtons}>
                                         <Link to={'cart'}><button type="button">VIEW BAG</button></Link>

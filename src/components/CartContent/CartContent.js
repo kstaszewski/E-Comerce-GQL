@@ -27,6 +27,7 @@ class CartContent extends Component {
             });
             this.setState({selectedImgIndex: newState, data: this.props.data});
         }
+        if (prevState.data !== this.props.data && this.props.data.length === 0 && this.props.turnOffOverlayBackground) this.props.turnOffOverlayBackground();
     }
 
     render () {

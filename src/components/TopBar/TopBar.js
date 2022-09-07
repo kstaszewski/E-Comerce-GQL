@@ -111,7 +111,6 @@ class TopBar extends React.Component {
                                         <p className={css.cartOverlayTitle}>{`My Bag, `}</p>
                                         <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity, 0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity, 0) > 1 ? "items" : "item"}`}</p>
                                     </div>
-                                    {console.log(this.props.cart)}
                                     <CartContent
                                         data={this.props.cart}
                                         currencyPass={this.state.activeCurrency}

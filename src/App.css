@@ -1,3 +1,24 @@
+:root {
+  /* borders */
+  --brd_default: 1px solid #1D1F22;
+  --brd_space: 1px solid #1D1F22;
+  --brd_textAttribute: 1px solid #1D1F22;
+  --brd_navSelected: 2px solid #5ece00;
+
+  /* outlines */
+  --out_selectedSwatch: 2px solid var(--col-button);
+
+  /* colors */
+  --col_button: #5ECE7B;
+  --col_buttonHovered: #4dbd6a;
+  --col_buttonInactive: #5e5e5e;
+  --col_buttonBorderedHovered: #bbb;
+  --col_navSelected: #5ece00;
+
+  /* boxShadows */
+  --boxshdw_default: 0px 4px 35px rgba(168, 172, 176, 0.19)
+}
+
 body {
   font-family: 'Raleway', sans-serif;
   font-size: 1rem;
@@ -18,4 +39,14 @@ h2 {
 p {
   margin-top: 5px;
   margin-bottom: 5px
+}
+
+button {
+  background: none;
+  border: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
 }

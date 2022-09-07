@@ -76,7 +76,7 @@
 .textAttribute_item {
     display: flex;
     padding: 13px 22px;
-    border: 1px solid #1D1F22;
+    border: var(--brd_default);
     cursor: pointer;
 }
 
@@ -87,14 +87,14 @@
 
 .swatchAttribute_item {
     padding: 15px 15px;
-    border: 1px solid #1D1F22;
+    border: var(--brd_default);
     cursor: pointer;
 }
 
 .selectedSwatchAttribute {
     padding: 15px 15px;
-    border: 1px solid #fff;
-    outline: 2px solid #5ECE7B;
+    border: var(--brd_space);
+    outline: 2px solid var(--col_button);
 }
 
 .price p {
@@ -120,21 +120,21 @@
     line-height: 120%;
     text-align: center;
     color: #ffff;
-    background-color: #5ECE7B;
+    background-color: var(--col_button);
     cursor: pointer;
 }
 
 .addToChart:hover {
-    background-color: #4dbd6a;
+    background-color: var(--col_buttonHovered);
 }
 
 .addToChartDisabled {
-    background-color: #5e5e5e;
+    background-color: var(--col_buttonInactive);
     cursor: default;
 }
 
 .addToChartDisabled:hover {
-    background-color: #5e5e5e;
+    background-color: var(--col_buttonInactive);
 }
 
 .description {
@@ -143,5 +143,4 @@
     font-family: 'Roboto', sans-serif;
     font-size: 1rem;
     font-weight: 400;
-
 }

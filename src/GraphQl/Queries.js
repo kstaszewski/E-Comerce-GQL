@@ -24,6 +24,7 @@ query{
     }
 }
 `;
+
 export const GET_TOPBAR_DATA = gql`
 query{
   currencies{

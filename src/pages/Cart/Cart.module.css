@@ -34,10 +34,10 @@
     width: 279px;
     height: 43px;
     color: #fff;
-    background-color: #5ECE7B;
+    background-color: var(--col_button);
     cursor: pointer;
 }
 
 .container a button:hover {
-    background-color: #4dbd6a;
+    background-color: var(--col_buttonHovered);
 }

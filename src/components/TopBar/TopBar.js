@@ -17,7 +17,7 @@ class TopBar extends React.Component {
             active: "all",
             currencyDisplayed: false,
             currencies: [],
-            activeCurrency: {},
+            activeCurrency: JSON.parse(localStorage.getItem("activeCurrency")) ?? {},
             cart: [],
             cartOverlayDisplayed: false,
         };
@@ -34,10 +34,10 @@ class TopBar extends React.Component {
                     if (category.products.length > 0) arr.push(category.name.toUpperCase());
                 });
                 return (
-                    {currencies: res.data.currencies, activeCurrency: res.data.currencies[0], categoriesArray: arr}
+                    {currencies: res.data.currencies, categoriesArray: arr, activeCurrency: this.state.activeCurrency.label ? this.state.activeCurrency : res.data.currencies[0]}
                 );
             });
-            this.props.currencyChange(res.data.currencies[0]);
+            this.props.currencyChange(this.state.activeCurrency.label ? this.state.activeCurrency : res.data.currencies[0]);
         });
     }
     componentDidUpdate () {
@@ -91,7 +91,7 @@ class TopBar extends React.Component {
                             <div className={css.currencyMenu} style={{display: this.state.currencyDisplayed ? "block" : "none"}}>
                                 {this.state.currencies.map((currency, index) => {
                                     return (
-                                        <div className={css.currency} key={index} id={currency.label} onClick={(e) => {this.setState({activeCurrency: currency}); this.props.currencyChange(currency);}}>
+                                        <div className={css.currency + " " + (currency.label === this.state.activeCurrency.label ? css.activeCurrency : null)} key={index} id={currency.label} onClick={(e) => {this.setState({activeCurrency: currency}); this.props.currencyChange(currency); localStorage.setItem("activeCurrency", JSON.stringify(currency));}}>
                                             <p>{`${currency.symbol} ${currency.label}`}</p>
                                         </div>
                                     );
@@ -120,16 +120,16 @@ class TopBar extends React.Component {
                                     />
                                     <div className={css.cartTotalPrice}>
                                         <p>Total</p>
-                                        <p>{this.state.activeCurrency.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : Math.round((totalValue() + Number.EPSILON) * 100) / 100)}</p>
+                                        <p>{this.state.activeCurrency.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : (Math.round((totalValue() + Number.EPSILON) * 100) / 100).toFixed(2))}</p>
                                     </div>
                                     <div className={css.cartOverlayButtons}>
                                         <Link to={'cart'}><button type="button">VIEW BAG</button></Link>
-                                        <Link to={'#'}><button type="submitt">CHECK OUT</button> </Link>
+                                        <Link to={'#'}><button type="submit">CHECK OUT</button> </Link>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div className={css.cartOverlayBackgroud} style={{display: this.state.cartOverlayDisplayed ? "block" : "none", height: (window.document.body.clientHeight < window.innerHeight) ? window.innerHeight - 80 + 'px' : window.document.body.clientHeight - 80 + 'px'}} />
+                        <div className={css.cartOverlayBackground} style={{display: this.state.cartOverlayDisplayed ? "block" : "none", height: (window.document.body.clientHeight < window.innerHeight) ? window.innerHeight - 80 + 'px' : window.document.body.clientHeight - 80 + 'px'}} />
                     </div>
                 </header >
                 <Outlet />

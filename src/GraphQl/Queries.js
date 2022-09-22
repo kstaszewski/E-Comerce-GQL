@@ -1,9 +1,8 @@
 import { gql } from "@apollo/client";
 
-export const GET_BEGINING_DATA = gql`
+export const GET_CATEGORY_DATA = `
 query{
-    categories{
-      name,
+    category(input: {title: "$categoryToPass"}){
       products{
         id,
         name,
@@ -40,7 +39,7 @@ query{
 
 export const GET_PRODUCT_DATA = `
 query{
-product(id: $idToPass){
+product(id: "$idToPass"){
   brand,
   name,
   attributes{

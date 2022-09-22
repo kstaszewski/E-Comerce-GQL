@@ -2,7 +2,6 @@ import React from 'react';
 import {Routes, Route, Navigate} from 'react-router-dom';
 import './App.css';
 import withRouter from './components/withRouter/withRouter';
-
 import TopBar from './components/TopBar/TopBar';
 import Category from './pages/Category/Category';
 import Product from './pages/Product/Product';

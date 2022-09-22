@@ -2,6 +2,7 @@
 backend
 
 .VSCodeCounter
+.vscode
 
 # Logs
 logs

@@ -1,4 +1,4 @@
-import React, {useEffect} from "react";
+import React from "react";
 import css from "./Product.module.css";
 import withRouter from "../../components/withRouter/withRouter";
 import {GET_PRODUCT_DATA} from '../../GraphQl/Queries';
@@ -19,7 +19,7 @@ class Product extends React.Component {
 
     componentDidMount () {
         Client.query({
-            query: gql`${GET_PRODUCT_DATA.replace('$idToPass', `"${this.props.params.id.toString()}"`)}`
+            query: gql(`${GET_PRODUCT_DATA.replace('$idToPass', `${this.props.params.id.toString()}`)}`)
         }).then(res => {
             this.setState(() => {
                 let atr = {};
@@ -64,6 +64,10 @@ class Product extends React.Component {
             if (existsIndex !== -1) {
                 newCart[existsIndex].quantity += 1;
             } else {
+                let randomCartId;
+                do randomCartId = Math.floor(Math.random() * 1000);
+                while (this.state.cart.map(cartItem => cartItem.cartId).includes(randomCartId));
+                data.cartId = randomCartId;
                 data.quantity = 1;
                 newCart.push(data);
             }
@@ -79,7 +83,7 @@ class Product extends React.Component {
                             <div className={css.photoContainer_thumbnails}>
 
                                 {this.state.productData.gallery.map((photo, index) => {
-                                    if (this.state.productData.gallery.length <= 1) return;
+                                    if (this.state.productData.gallery.length <= 1) return null;
                                     return (
                                         <img src={photo} key={index} alt="" onClick={() => this.setState({selectedPhoto: photo})} />
                                     );
@@ -131,9 +135,8 @@ class Product extends React.Component {
                             <div className={css.price}>
                                 <p>PRICE:</p>
                                 <p>{this.state.productData.prices.map(price => {
-                                    if (price.currency.label === this.state.selectedCurrency) {
-                                        return (price.currency.symbol + price.amount);
-                                    }
+                                    if (price.currency.label === this.state.selectedCurrency) return (price.currency.symbol + (Math.round(price.amount * 100) / 100).toFixed(2));
+                                    return null;
                                 })}</p>
                             </div>
                             <div className={css.addToChart + " " + ((!this.state.productData.inStock || Object.values(this.state.selectedAttributes).find(x => x === 'notChosen')) ? css.addToChartDisabled : null)} onClick={() => {

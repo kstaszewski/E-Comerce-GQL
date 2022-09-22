@@ -1,12 +1,12 @@
 :root {
   /* borders */
   --brd_default: 1px solid #1D1F22;
-  --brd_space: 1px solid #1D1F22;
+  --brd_space: 1px solid #ffffff;
   --brd_textAttribute: 1px solid #1D1F22;
   --brd_navSelected: 2px solid #5ece00;
 
   /* outlines */
-  --out_selectedSwatch: 2px solid var(--col-button);
+  --out_selectedSwatch: 2px solid #5ECE7B;
 
   /* colors */
   --col_button: #5ECE7B;

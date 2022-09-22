@@ -96,6 +96,10 @@ nav a:focus::after,
     background-color: #EEE;
 }
 
+.activeCurrency{
+    color: var(--col_navSelected);
+}
+
 .cart,
 .cartWrapper {
     position: relative;
@@ -159,7 +163,7 @@ nav a:focus::after,
     font-size: 1rem;
 }
 
-.cartOverlayBackgroud {
+.cartOverlayBackground {
     display: block;
     position: absolute;
     top: 80px;

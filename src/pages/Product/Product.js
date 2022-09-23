@@ -6,8 +6,9 @@ import {GET_PRODUCT_DATA} from '../../GraphQl/Queries';
 import {Client} from '../../GraphQl/Client';
 import {gql} from '@apollo/client';
 import parse from 'html-react-parser';
+import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
 
-class Product extends SaveCart {
+export class Product extends SaveCart {
     constructor () {
         super();
         this.state = {
@@ -72,39 +73,18 @@ class Product extends SaveCart {
                             <h1>{this.state.productData.brand}</h1>
                             <h2 id={css.subtitle}>{this.state.productData.name}</h2>
                             {this.state.productData.attributes.map((attribute, index) => {
-                                if (attribute.type === 'text') {
-                                    return (
-                                        <div className={css.textAttribute} key={index}>
-                                            <p>{`${attribute.name}:`}</p>
-                                            <div className={css.textAttribute_itemsContainer}>
-                                                {attribute.items.map((item, index) => {
-                                                    return (
-                                                        <div className={css.textAttribute_item + " " +
-                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString() ? (css.selectedTextAttribute) : null)
-                                                        } key={index} onClick={() => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: item.value}})}>
-                                                            <p>{item.value}</p>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    );
-                                } else {
-                                    return (
-                                        <div className={css.swatchAttribute} key={index}>
-                                            <p>{`${attribute.name}:`}</p>
-                                            <div className={css.swatchAttribute_itemsContainer}>
-                                                {attribute.items.map((item, index) => {
-                                                    return (
-                                                        <div style={{"backgroundColor": item.value}} className={css.swatchAttribute_item + " " +
-                                                            (this.state.selectedAttributes[attribute.name] === item.value.toString() ? css.selectedSwatchAttribute : null)
-                                                        } key={index} onClick={() => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: item.value}})}>
-                                                        </div>
-                                                    );
-                                                })}
-                                            </div>
-                                        </div>
-                                    );
+                                switch (attribute.type) {
+                                    case "text": return <TextAttribute
+                                        key={index}
+                                        attribute={attribute}
+                                        onAttributeClick={(e) => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: e.target.value}})}
+                                    />;
+                                    case "swatch": return <SwatchAttribute
+                                        key={index}
+                                        attribute={attribute}
+                                        onAttributeClick={(e) => this.setState({selectedAttributes: {...this.state.selectedAttributes, [attribute.name]: e.target.value}})}
+                                    />;
+                                    default: return null;
                                 }
                             })}
                             <div className={css.price}>

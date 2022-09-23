@@ -1,6 +1,6 @@
 import {Component} from 'react';
 
-export class SaveCart extends Component {
+class SaveCart extends Component {
 
     shallowEqual = (object1, object2) => {
         const keys1 = Object.keys(object1);

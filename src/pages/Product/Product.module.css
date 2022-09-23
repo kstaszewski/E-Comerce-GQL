@@ -53,50 +53,6 @@
     grid-column: 3;
 }
 
-.textAttribute,
-.swatchAttribute {
-    display: block;
-    margin: 24px 0;
-    font-family: 'Roboto Condensed', sans-serif;
-    font-size: 1.125rem;
-    font-weight: 700;
-}
-
-.textAttribute_itemsContainer,
-.swatchAttribute_itemsContainer {
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    gap: 12px;
-    font-family: 'Source Sans Pro', sans-serif;
-    font-weight: 400;
-
-}
-
-.textAttribute_item {
-    display: flex;
-    padding: 13px 22px;
-    border: var(--brd_default);
-    cursor: pointer;
-}
-
-.selectedTextAttribute {
-    background-color: #000;
-    color: #fff
-}
-
-.swatchAttribute_item {
-    padding: 15px 15px;
-    border: var(--brd_default);
-    cursor: pointer;
-}
-
-.selectedSwatchAttribute {
-    padding: 15px 15px;
-    border: var(--brd_space);
-    outline: 2px solid var(--col_button);
-}
-
 .price p {
     margin-top: 10px;
     font-size: 1.5rem;

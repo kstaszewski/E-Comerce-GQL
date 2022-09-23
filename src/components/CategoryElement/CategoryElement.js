@@ -3,7 +3,7 @@ import css from './CategoryElement.module.css';
 import {Cart} from "./CategoryElement.module.svgs";
 import {Link} from "react-router-dom";
 
-export class CategoryElement extends Component {
+class CategoryElement extends Component {
     constructor (props) {
         super(props);
         this.product = props.product;

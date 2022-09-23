@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import css from "./CartContent.module.css";
 import {Add, Remove, PrevImage, NextImage} from './CartContent.module.svgs';
+import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
 
 class CartContent extends Component {
     constructor () {
@@ -23,7 +24,7 @@ class CartContent extends Component {
         if (prevState.data !== this.props.data) {
             let newState = {};
             this.props.data.forEach(item => {
-                newState[item.cartId.toString()] = this.state.selectedImgIndex[item.cartId] ?? 0;                                                  
+                newState[item.cartId.toString()] = this.state.selectedImgIndex[item.cartId] ?? 0;
             });
             this.setState({selectedImgIndex: newState, data: this.props.data});
         }
@@ -87,39 +88,20 @@ class CartContent extends Component {
                                         return null;
                                     })}</p>
                                     {element.attributes.map((attribute, index) => {
-                                        if (attribute.type === 'text') {
-                                            return (
-                                                <div className={(this.props.overlayMode ? (css.textAttribute + " " + css.textAttributeOverlay) : css.textAttribute)} key={index}>
-                                                    <p>{(this.props.overlayMode ? `${attribute.name}:` : `${attribute.name.toUpperCase()}:`)}</p>
-                                                    <div className={(this.props.overlayMode ? (css.textAttribute_itemsContainer + " " + css.textAttribute_itemsContainerOverlay) : css.textAttribute_itemsContainer)}>
-                                                        {attribute.items.map((item, index) => {
-                                                            return (
-                                                                <div className={(this.props.overlayMode ? (css.textAttribute_item + " " + css.textAttribute_itemOverlay) : css.textAttribute_item) + " " +
-                                                                    (element.selectedAttributes[attribute.name] === item.value.toString() ? (css.selectedTextAttribute) : null)
-                                                                } key={index}>
-                                                                    <p>{item.value}</p>
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            );
-                                        } else {
-                                            return (
-                                                <div className={(this.props.overlayMode ? (css.swatchAttribute + " " + css.swatchAttributeOverlay) : css.swatchAttribute)} key={index}>
-                                                    <p>{(this.props.overlayMode ? `${attribute.name}:` : `${attribute.name.toUpperCase()}:`)}</p>
-                                                    <div className={(this.props.overlayMode ? (css.swatchAttribute_itemsContainer + " " + css.swatchAttribute_itemsContainerOverlay) : css.swatchAttribute_itemsContainer)}>
-                                                        {attribute.items.map((item, index) => {
-                                                            return (
-                                                                <div style={{"backgroundColor": item.value}} className={css.swatchAttribute_item + " " +
-                                                                    (element.selectedAttributes[attribute.name] === item.value.toString() ? css.selectedSwatchAttribute : null) + " " + (this.props.overlayMode ? (css.swatchAttribute_itemOverlay) : null) + " " + ((this.props.overlayMode && element.selectedAttributes[attribute.name] === item.value.toString()) ? (css.selectedSwatchAttributeOverlay) : null)
-                                                                } key={index} >
-                                                                </div>
-                                                            );
-                                                        })}
-                                                    </div>
-                                                </div>
-                                            );
+                                        switch (attribute.type) {
+                                            case "text": return <TextAttribute
+                                                key={index}
+                                                attribute={attribute}
+                                                selectedAttribute={element.selectedAttributes[attribute.name]}
+                                                overlayMode={this.props.overlayMode}
+                                            />;
+                                            case "swatch": return <SwatchAttribute
+                                                key={index}
+                                                attribute={attribute}
+                                                selectedAttribute={element.selectedAttributes[attribute.name]}
+                                                overlayMode={this.props.overlayMode}
+                                            />;
+                                            default: return null;
                                         }
                                     })}
                                 </div>

@@ -1,11 +1,13 @@
 import React from "react";
+import SaveCart from "../../components/SaveCart/SaveCart";
 import css from "./Product.module.css";
 import withRouter from "../../components/withRouter/withRouter";
 import {GET_PRODUCT_DATA} from '../../GraphQl/Queries';
 import {Client} from '../../GraphQl/Client';
 import {gql} from '@apollo/client';
+import parse from 'html-react-parser';
 
-class Product extends React.Component {
+class Product extends SaveCart {
     constructor () {
         super();
         this.state = {
@@ -42,39 +44,12 @@ class Product extends React.Component {
         if (this.props.currencyPass.label !== this.state.selectedCurrency) this.setState({selectedCurrency: this.props.currencyPass.label});
     }
 
+    handleSaveCart = (dataToAdd, currentCart) => {
+        this.setState(this.saveCart(dataToAdd, currentCart));
+        this.props.forceUpdate();
+    };
+
     render () {
-
-        const shallowEqual = (object1, object2) => {
-            const keys1 = Object.keys(object1);
-            const keys2 = Object.keys(object2);
-            if (keys1.length !== keys2.length) {
-                return false;
-            }
-            for (let key of keys1) {
-                if (object1[key] !== object2[key]) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        const saveCart = data => {
-            let newCart = [...this.state.cart];
-            const existsIndex = this.state.cart.findIndex(item => (item.name === data.name && shallowEqual(item.selectedAttributes, data.selectedAttributes)));
-            if (existsIndex !== -1) {
-                newCart[existsIndex].quantity += 1;
-            } else {
-                let randomCartId;
-                do randomCartId = Math.floor(Math.random() * 1000);
-                while (this.state.cart.map(cartItem => cartItem.cartId).includes(randomCartId));
-                data.cartId = randomCartId;
-                data.quantity = 1;
-                newCart.push(data);
-            }
-            this.setState({cart: newCart});
-            localStorage.setItem("cart", JSON.stringify(newCart));
-            this.props.forceUpdate();
-        };
         return (
             <>
                 {this.state.productData &&
@@ -141,18 +116,18 @@ class Product extends React.Component {
                             </div>
                             <div className={css.addToChart + " " + ((!this.state.productData.inStock || Object.values(this.state.selectedAttributes).find(x => x === 'notChosen')) ? css.addToChartDisabled : null)} onClick={() => {
                                 if (!this.state.productData.inStock || Object.values(this.state.selectedAttributes).find(x => x === 'notChosen')) return;
-                                saveCart({
+                                this.handleSaveCart({
                                     name: this.state.productData.name,
                                     brand: this.state.productData.brand,
                                     prices: this.state.productData.prices,
                                     gallery: this.state.productData.gallery,
                                     selectedAttributes: this.state.selectedAttributes,
                                     attributes: this.state.productData.attributes
-                                });
+                                }, this.state.cart);
                             }}>
                                 <p>{this.state.productData.inStock ? Object.values(this.state.selectedAttributes).find(x => x === 'notChosen') ? "SELECT ALL ATTRIBUTES" : "TO CHART" : "OUT OF STOCK"}</p>
                             </div>
-                            <div className={css.description} dangerouslySetInnerHTML={{__html: this.state.productData.description}} />
+                            <div className={css.description}> {parse(this.state.productData.description)}</div>
                         </div>
                     </div>
                 }

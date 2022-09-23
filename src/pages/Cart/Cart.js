@@ -7,9 +7,6 @@ import {Link} from 'react-router-dom';
 
 class Cart extends Component {
 
-    componentDidUpdate () {
-    }
-
     render () {
         const totalValue = e => {
             return this.props.cart.reduce((prev, current) => {

@@ -1,21 +1,21 @@
 import React from "react";
-import defaultComponent from "../../components/defaultComponent";
+import SaveCart from "../../components/SaveCart/SaveCart";
 import css from "./Category.module.css";
-import {Cart} from "./Category.module.svgs";
-import {Link, Navigate} from "react-router-dom";
 import withRouter from "../../components/withRouter/withRouter";
 import {Client} from '../../GraphQl/Client';
 import {GET_CATEGORY_DATA} from '../../GraphQl/Queries';
 import {gql} from '@apollo/client';
+import {Navigate} from "react-router-dom";
+import CategoryElement from "../../components/CategoryElement/CategoryElement";
 
 
-class Category extends defaultComponent {
+class Category extends SaveCart {
     constructor (props) {
         super(props);
         this.state = {
             products: [],
             selectedCategory: "",
-            selectedCurrency: "USD",
+            selectedCurrency: 'USD',
             wrongCategory: false,
         };
     }
@@ -51,38 +51,12 @@ class Category extends defaultComponent {
         });
     };
 
-    render () {
-        const shallowEqual = (object1, object2) => {
-            const keys1 = Object.keys(object1);
-            const keys2 = Object.keys(object2);
-            if (keys1.length !== keys2.length) {
-                return false;
-            }
-            for (let key of keys1) {
-                if (object1[key] !== object2[key]) {
-                    return false;
-                }
-            }
-            return true;
-        };
+    handleSaveCart = (dataToAdd, currentCart) => {
+        this.setState(this.saveCart(dataToAdd, currentCart));
+        this.props.forceUpdate();
+    };
 
-        const saveCart = data => {
-            let newCart = [...this.props.cart];
-            const existsIndex = this.props.cart.findIndex(item => (item.name === data.name && shallowEqual(item.selectedAttributes, data.selectedAttributes)));
-            if (existsIndex !== -1) {
-                newCart[existsIndex].quantity += 1;
-            } else {
-                let randomCartId;
-                do randomCartId = Math.floor(Math.random() * 1000);
-                while (this.state.cart.map(cartItem => cartItem.cartId).includes(randomCartId));
-                data.cartId = randomCartId;
-                data.quantity = 1;
-                newCart.push(data);
-            }
-            this.setState({cart: newCart});
-            localStorage.setItem("cart", JSON.stringify(newCart));
-            this.props.forceUpdate();
-        };
+    render () {
         return (
             <>
                 {this.state.wrongCategory && <Navigate to={`/all`} />}
@@ -92,41 +66,22 @@ class Category extends defaultComponent {
                         <div className={css.products}>
                             {this.state.products.map((product, index) => {
                                 return (
-                                    <div className={css.productWrapper} key={index}>
-                                        <Link className={css.product} id={product.id} to={`/product/${product.id}`}>
-                                            <div className={css.photoContainer}>
-                                                <img src={product.gallery[0]} alt={product.name} />
-                                            </div>
-                                            <div className={css.productInfo}>
-                                                <p className={css.productName}>{`${product.brand} ${product.name}`}</p>
-                                                <p className={css.productPrice}>{product.prices.map(price => {
-                                                    if (price.currency.label === this.state.selectedCurrency) return (price.currency.symbol + (Math.round(price.amount * 100) / 100).toFixed(2));
-                                                    return "";
-                                                })}</p>
-                                            </div>
-                                            {product.inStock === false &&
-                                                <div className={css.product_unavailable}>
-                                                    <p>OUT OF STOCK</p>
-                                                </div>
-                                            }
-                                        </Link>
-                                        {product.attributes.length === 0 && product.inStock &&
-                                            <div className={css.product_cart}>
-                                                <Cart onClick={() => {
-                                                    if (!product.inStock) return;
-                                                    saveCart({
-                                                        name: product.name,
-                                                        brand: product.brand,
-                                                        prices: product.prices,
-                                                        gallery: product.gallery,
-                                                        selectedAttributes: [],
-                                                        attributes: []
-                                                    });
-                                                }} />
-                                            </div>
-                                        }
-                                    </div>
-                                );
+                                    <CategoryElement
+                                        key={index}
+                                        product={product}
+                                        selectedCurrency={this.state.selectedCurrency}
+                                        onCartAddClick={() => {
+                                            if (!product.inStock) return;
+                                            this.handleSaveCart({
+                                                name: product.name,
+                                                brand: product.brand,
+                                                prices: product.prices,
+                                                gallery: product.gallery,
+                                                selectedAttributes: [],
+                                                attributes: []
+                                            }, this.props.cart);
+                                        }}
+                                    />);
                             })}
                         </div>
                     </div>

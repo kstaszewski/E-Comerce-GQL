@@ -1,5 +1,5 @@
 import React from "react";
-import SaveCart from "../../components/SaveCart/SaveCart";
+import CartLogic from "../../components/CartLogic/CartLogic";
 import css from "./Product.module.css";
 import withRouter from "../../components/withRouter/withRouter";
 import {GET_PRODUCT_DATA} from '../../GraphQl/Queries';
@@ -9,7 +9,7 @@ import parse from 'html-react-parser';
 import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
 import ProductUnavailableOpacity from "../../components/ProductUnavailableOpacity/ProductUnavailableOpacity";
 
-export class Product extends SaveCart {
+export class Product extends CartLogic {
     constructor () {
         super();
         this.state = {

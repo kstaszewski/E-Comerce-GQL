@@ -1,6 +1,6 @@
 import {Component} from 'react';
 
-class SaveCart extends Component {
+class CartLogic extends Component {
 
     shallowEqual = (object1, object2) => {
         const keys1 = Object.keys(object1);
@@ -60,5 +60,15 @@ class SaveCart extends Component {
         localStorage.setItem("cart", JSON.stringify(newCart));
         this.props.forceUpdate();
     };
+
+    totalValue = (cart, currency) => {
+        if (!cart || cart === undefined || !currency || currency === undefined) return;
+        return cart.reduce((prev, current) => {
+            const singlePrice = current.prices.filter((el) => {
+                return el.currency.label === currency.label;
+            });
+            return prev + parseFloat(singlePrice[0]?.amount * current.quantity);
+        }, 0);
+    };
 }
-export default SaveCart;
+export default CartLogic;

@@ -1,6 +1,7 @@
 import React from "react";
 import css from "./TopBar.module.css";
 import withRouter from "../withRouter/withRouter";
+import CartLogic from "../CartLogic/CartLogic";
 
 import {Logo, Cart, Arrow, ArrowUp} from "./TopBar.module.svgs";
 import {Link, Outlet} from "react-router-dom";
@@ -9,7 +10,7 @@ import {Client} from '../../GraphQl/Client';
 import {GET_TOPBAR_DATA} from "../../GraphQl/Queries";
 import CartContent from "../CartContent/CartContent";
 
-class TopBar extends React.Component {
+class TopBar extends CartLogic {
     constructor (props) {
         super(props);
         this.state = {
@@ -57,14 +58,7 @@ class TopBar extends React.Component {
     };
 
     render () {
-        const totalValue = e => {
-            return this.props.cart.reduce((prev, current) => {
-                const singlePrice = current.prices.filter((el) => {
-                    return el.currency.label === this.state.activeCurrency.label;
-                });
-                return prev + parseFloat(singlePrice[0]?.amount * current.quantity);
-            }, 0);
-        };
+        const {cart} = this.props;
         return (
             <>
                 <header >
@@ -112,7 +106,7 @@ class TopBar extends React.Component {
                                         <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity, 0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity, 0) > 1 ? "items" : "item"}`}</p>
                                     </div>
                                     <CartContent
-                                        data={this.props.cart}
+                                        data={cart}
                                         currencyPass={this.state.activeCurrency}
                                         forceUpdate={this.props.forceUpdate}
                                         overlayMode={true}
@@ -120,7 +114,7 @@ class TopBar extends React.Component {
                                     />
                                     <div className={css.cartTotalPrice}>
                                         <p>Total</p>
-                                        <p>{this.state.activeCurrency.symbol + ((isNaN(totalValue()) || totalValue() === 0) ? "0" : (Math.round((totalValue() + Number.EPSILON) * 100) / 100).toFixed(2))}</p>
+                                        <p>{this.state.activeCurrency.symbol + ((isNaN(this.totalValue(cart, this.state.activeCurrency)) || this.totalValue(cart, this.state.activeCurrency) === 0) ? "0" : (Math.round((this.totalValue(cart, this.state.activeCurrency) + Number.EPSILON) * 100) / 100).toFixed(2))}</p>
                                     </div>
                                     <div className={css.cartOverlayButtons}>
                                         <Link to={'cart'}><button type="button">VIEW BAG</button></Link>

@@ -1,5 +1,5 @@
 import React from "react";
-import SaveCart from "../../components/SaveCart/SaveCart";
+import CartLogic from "../../components/CartLogic/CartLogic";
 import css from "./Category.module.css";
 import withRouter from "../../components/withRouter/withRouter";
 import {Client} from '../../GraphQl/Client';
@@ -9,7 +9,7 @@ import {Navigate} from "react-router-dom";
 import CategoryElement from "../../components/CategoryElement/CategoryElement";
 
 
-class Category extends SaveCart {
+class Category extends CartLogic {
     constructor (props) {
         super(props);
         this.state = {

@@ -1,10 +1,10 @@
 import React from 'react';
-import SaveCart from '../SaveCart/SaveCart';
+import CartLogic from '../CartLogic/CartLogic';
 import css from "./CartContent.module.css";
 import {Add, Remove, PrevImage, NextImage} from './CartContent.module.svgs';
 import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
 
-class CartContent extends SaveCart {
+class CartContent extends CartLogic {
     constructor () {
         super();
         this.state = {

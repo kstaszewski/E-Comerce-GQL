@@ -7,6 +7,7 @@ import {Client} from '../../GraphQl/Client';
 import {gql} from '@apollo/client';
 import parse from 'html-react-parser';
 import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
+import ProductUnavailableOpacity from "../../components/ProductUnavailableOpacity/ProductUnavailableOpacity";
 
 export class Product extends SaveCart {
     constructor () {
@@ -57,7 +58,6 @@ export class Product extends SaveCart {
                     <div className={css.container}>
                         <div className={css.photoContainer}>
                             <div className={css.photoContainer_thumbnails}>
-
                                 {this.state.productData.gallery.map((photo, index) => {
                                     if (this.state.productData.gallery.length <= 1) return null;
                                     return (
@@ -67,6 +67,9 @@ export class Product extends SaveCart {
                             </div>
                             <div className={css.photoContainer_photo}>
                                 <img src={this.state.selectedPhoto} alt="" />
+                                {this.state.productData.inStock === false &&
+                                    <ProductUnavailableOpacity />
+                                }
                             </div>
                         </div>
                         <div className={css.infoContainer}>

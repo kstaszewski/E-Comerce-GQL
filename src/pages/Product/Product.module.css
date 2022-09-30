@@ -45,6 +45,7 @@
 .photoContainer_photo {
     grid-column: 3;
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: flex-start;
 }

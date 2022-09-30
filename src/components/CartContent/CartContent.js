@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React from 'react';
+import SaveCart from '../SaveCart/SaveCart';
 import css from "./CartContent.module.css";
 import {Add, Remove, PrevImage, NextImage} from './CartContent.module.svgs';
 import {SwatchAttribute, TextAttribute} from "../../components/AttributesDisplay/AttributesDisplay";
 
-class CartContent extends Component {
+class CartContent extends SaveCart {
     constructor () {
         super();
         this.state = {
@@ -32,42 +33,6 @@ class CartContent extends Component {
     }
 
     render () {
-        const shallowEqual = (object1, object2) => {
-            const keys1 = Object.keys(object1);
-            const keys2 = Object.keys(object2);
-            if (keys1.length !== keys2.length) {
-                return false;
-            }
-            for (let key of keys1) {
-                if (object1[key] !== object2[key]) {
-                    return false;
-                }
-            }
-            return true;
-        };
-
-        const addItemQty = data => {
-            let newCart = [...this.props.data];
-            const existsIndex = this.props.data.findIndex(item => (item.name === data.name && shallowEqual(item.selectedAttributes, data.selectedAttributes)));
-            if (existsIndex !== -1) {
-                newCart[existsIndex].quantity += 1;
-            } else {
-                return;
-            }
-            localStorage.setItem("cart", JSON.stringify(newCart));
-            this.props.forceUpdate();
-        };
-        const removeItemQty = data => {
-            let newCart = [...this.props.data];
-            const existsIndex = this.props.data.findIndex(item => (item.name === data.name && shallowEqual(item.selectedAttributes, data.selectedAttributes)));
-            if (existsIndex !== -1 && newCart[existsIndex].quantity !== 1) {
-                newCart[existsIndex].quantity -= 1;
-            } else {
-                newCart.splice(existsIndex, 1);
-            }
-            localStorage.setItem("cart", JSON.stringify(newCart));
-            this.props.forceUpdate();
-        };
         const handlePrevImage = (index, e) => {
             this.setState({selectedImgIndex: {...this.state.selectedImgIndex, [index]: (this.state.selectedImgIndex[index] === 0) ? (e.gallery.length - 1) : (this.state.selectedImgIndex[index] - 1)}});
         };
@@ -107,9 +72,9 @@ class CartContent extends Component {
                                 </div>
                                 <div className={(this.props.overlayMode ? (css.itemRightSite + " " + css.itemRightSiteOverlay) : css.itemRightSite)}>
                                     <div className={css.qtyDisplay}>
-                                        <Add size={this.props.overlayMode ? "21" : "45"} onClick={() => addItemQty(element)} />
+                                        <Add size={this.props.overlayMode ? "21" : "45"} onClick={() => this.addItemQty(element)} />
                                         <p>{element.quantity}</p>
-                                        <Remove size={this.props.overlayMode ? "21" : "45"} onClick={() => removeItemQty(element)} />
+                                        <Remove size={this.props.overlayMode ? "21" : "45"} onClick={() => this.removeItemQty(element)} />
                                     </div>
                                     {element.gallery && <div className={css.photo}>
                                         {(element.gallery.length > 1 && !this.props.overlayMode) && <div className={css.photoNavigation}>

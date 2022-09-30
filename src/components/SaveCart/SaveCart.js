@@ -17,6 +17,7 @@ class SaveCart extends Component {
     };
 
     saveCart = (dataToAdd, currentCart) => {
+        if (!dataToAdd || !currentCart || dataToAdd === undefined || currentCart === undefined) return;
         const {name, selectedAttributes} = dataToAdd;
         let newCart = [...currentCart];
         const existsIndex = currentCart.findIndex(item => (item.name === name && this.shallowEqual(item.selectedAttributes, selectedAttributes)));
@@ -33,6 +34,31 @@ class SaveCart extends Component {
         localStorage.setItem("cart", JSON.stringify(newCart));
         return {cart: newCart};
     };
-}
 
+    addItemQty = data => {
+        if (!data || data === undefined) return;
+        let newCart = [...this.props.data];
+        const existsIndex = this.props.data.findIndex(item => (item.name === data.name && this.shallowEqual(item.selectedAttributes, data.selectedAttributes)));
+        if (existsIndex !== -1) {
+            newCart[existsIndex].quantity += 1;
+        } else {
+            return;
+        }
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        this.props.forceUpdate();
+    };
+
+    removeItemQty = data => {
+        if (!data || data === undefined) return;
+        let newCart = [...this.props.data];
+        const existsIndex = this.props.data.findIndex(item => (item.name === data.name && this.shallowEqual(item.selectedAttributes, data.selectedAttributes)));
+        if (existsIndex !== -1 && newCart[existsIndex].quantity !== 1) {
+            newCart[existsIndex].quantity -= 1;
+        } else {
+            newCart.splice(existsIndex, 1);
+        }
+        localStorage.setItem("cart", JSON.stringify(newCart));
+        this.props.forceUpdate();
+    };
+}
 export default SaveCart;

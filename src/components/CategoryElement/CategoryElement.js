@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import css from './CategoryElement.module.css';
 import {Cart} from "./CategoryElement.module.svgs";
 import {Link} from "react-router-dom";
+import ProductUnavailableOpacity from '../ProductUnavailableOpacity/ProductUnavailableOpacity';
 
 class CategoryElement extends Component {
     constructor (props) {
@@ -30,9 +31,7 @@ class CategoryElement extends Component {
                             })}</p>
                         </div>
                         {this.product.inStock === false &&
-                            <div className={css.product_unavailable}>
-                                <p>OUT OF STOCK</p>
-                            </div>
+                            <ProductUnavailableOpacity />
                         }
                     </Link>
                     {this.product.attributes.length === 0 && this.product.inStock &&

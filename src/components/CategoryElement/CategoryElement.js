@@ -16,6 +16,7 @@ class CategoryElement extends Component {
         if (this.props.selectedCurrency !== this.state.selectedCurrency) this.setState({selectedCurrency: this.props.selectedCurrency});
     }
     render () {
+        const {onCartAddClick} = this.props;
         return (
             <>
                 <div className={css.productWrapper}>
@@ -36,7 +37,7 @@ class CategoryElement extends Component {
                     </Link>
                     {this.product.attributes.length === 0 && this.product.inStock &&
                         <div className={css.product_cart}>
-                            <Cart onClick={() => this.props.onCartAddClick()} />
+                            <Cart onClick={() => onCartAddClick()} />
                         </div>
                     }
                 </div>

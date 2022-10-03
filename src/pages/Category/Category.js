@@ -57,6 +57,7 @@ class Category extends CartLogic {
     };
 
     render () {
+        const {cart} = this.props;
         return (
             <>
                 {this.state.wrongCategory && <Navigate to={`/all`} />}
@@ -79,7 +80,7 @@ class Category extends CartLogic {
                                                 gallery: product.gallery,
                                                 selectedAttributes: [],
                                                 attributes: []
-                                            }, this.props.cart);
+                                            }, cart);
                                         }}
                                     />);
                             })}

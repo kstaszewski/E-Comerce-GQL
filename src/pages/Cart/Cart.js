@@ -9,15 +9,15 @@ import CartLogic from '../../components/CartLogic/CartLogic';
 class Cart extends CartLogic {
 
     render () {
-        const {cart, currencyPass} = this.props;
+        const {cart, currencyPass, forceUpdate} = this.props;
         return (
             <>
                 <div className={css.container}>
                     <h2>CART</h2>
                     <CartContent
                         data={cart}
-                        currencyPass={this.props.currencyPass}
-                        forceUpdate={() => this.props.forceUpdate()}
+                        currencyPass={currencyPass}
+                        forceUpdate={() => forceUpdate()}
                     />
                     <div className={css.priceInfo}>
                         <div>
@@ -26,9 +26,9 @@ class Cart extends CartLogic {
                             <p>{`Total: `}</p>
                         </div>
                         <div>
-                            <p>{this.props.currencyPass.symbol + ((isNaN(this.totalValue(cart, currencyPass)) || this.totalValue(cart, currencyPass) === 0) ? "0" : Math.round((this.totalValue(cart, currencyPass) + Number.EPSILON) * 100) / 100)}</p>
+                            <p>{currencyPass.symbol + ((isNaN(this.totalValue(cart, currencyPass)) || this.totalValue(cart, currencyPass) === 0) ? "0" : Math.round((this.totalValue(cart, currencyPass) + Number.EPSILON) * 100) / 100)}</p>
                             <p>{cart.reduce((prev, current) => prev + parseInt(current.quantity), 0)}</p>
-                            <p>{this.props.currencyPass.symbol + ((isNaN(this.totalValue(cart, currencyPass)) || this.totalValue(cart, currencyPass) === 0) ? "0" : Math.round((this.totalValue(cart, currencyPass) + Number.EPSILON) * 100) / 100)}</p>
+                            <p>{currencyPass.symbol + ((isNaN(this.totalValue(cart, currencyPass)) || this.totalValue(cart, currencyPass) === 0) ? "0" : Math.round((this.totalValue(cart, currencyPass) + Number.EPSILON) * 100) / 100)}</p>
                         </div>
                     </div>
                     <Link to={'#'}>

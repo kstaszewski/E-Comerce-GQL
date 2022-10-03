@@ -35,30 +35,32 @@ class CartLogic extends Component {
         return {cart: newCart};
     };
 
-    addItemQty = data => {
-        if (!data || data === undefined) return;
-        let newCart = [...this.props.data];
-        const existsIndex = this.props.data.findIndex(item => (item.name === data.name && this.shallowEqual(item.selectedAttributes, data.selectedAttributes)));
+    addItemQty = ({name, selectedAttributes}) => {
+        if (name === undefined || selectedAttributes === undefined) return;
+        const {data, forceUpdate} = this.props;
+        let newCart = [...data];
+        const existsIndex = data.findIndex(item => (item.name === name && this.shallowEqual(item.selectedAttributes, selectedAttributes)));
         if (existsIndex !== -1) {
             newCart[existsIndex].quantity += 1;
         } else {
             return;
         }
         localStorage.setItem("cart", JSON.stringify(newCart));
-        this.props.forceUpdate();
+        forceUpdate();
     };
 
-    removeItemQty = data => {
-        if (!data || data === undefined) return;
-        let newCart = [...this.props.data];
-        const existsIndex = this.props.data.findIndex(item => (item.name === data.name && this.shallowEqual(item.selectedAttributes, data.selectedAttributes)));
+    removeItemQty = ({name, selectedAttributes}) => {
+        if (name === undefined || selectedAttributes === undefined) return;
+        const {data, forceUpdate} = this.props;
+        let newCart = [...data];
+        const existsIndex = data.findIndex(item => (item.name === name && this.shallowEqual(item.selectedAttributes, selectedAttributes)));
         if (existsIndex !== -1 && newCart[existsIndex].quantity !== 1) {
             newCart[existsIndex].quantity -= 1;
         } else {
             newCart.splice(existsIndex, 1);
         }
         localStorage.setItem("cart", JSON.stringify(newCart));
-        this.props.forceUpdate();
+        forceUpdate();
     };
 
     totalValue = (cart, currency) => {

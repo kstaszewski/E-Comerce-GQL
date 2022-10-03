@@ -58,7 +58,7 @@ class TopBar extends CartLogic {
     };
 
     render () {
-        const {cart} = this.props;
+        const {cart, currencyChange, forceUpdate} = this.props;
         return (
             <>
                 <header >
@@ -85,7 +85,7 @@ class TopBar extends CartLogic {
                             <div className={css.currencyMenu} style={{display: this.state.currencyDisplayed ? "block" : "none"}}>
                                 {this.state.currencies.map((currency, index) => {
                                     return (
-                                        <div className={css.currency + " " + (currency.label === this.state.activeCurrency.label ? css.activeCurrency : null)} key={index} id={currency.label} onClick={(e) => {this.setState({activeCurrency: currency}); this.props.currencyChange(currency); localStorage.setItem("activeCurrency", JSON.stringify(currency));}}>
+                                        <div className={css.currency + " " + (currency.label === this.state.activeCurrency.label ? css.activeCurrency : null)} key={index} id={currency.label} onClick={(e) => {this.setState({activeCurrency: currency}); currencyChange(currency); localStorage.setItem("activeCurrency", JSON.stringify(currency));}}>
                                             <p>{`${currency.symbol} ${currency.label}`}</p>
                                         </div>
                                     );
@@ -101,14 +101,14 @@ class TopBar extends CartLogic {
                             </NavLink>
                             <div className={css.cartOverlay}>
                                 <div className={css.cartOverlayInner}>
-                                    <div style={{display: "flex", gap: "1ch"}}>
+                                    <div className={css.cartOverlayTitleWrapper}>
                                         <p className={css.cartOverlayTitle}>{`My Bag, `}</p>
                                         <p className={css.cartOverlayTitle}>{`${this.state.cart.reduce((prev, current) => prev + current.quantity, 0)} ${this.state.cart.reduce((prev, current) => prev + current.quantity, 0) > 1 ? "items" : "item"}`}</p>
                                     </div>
                                     <CartContent
                                         data={cart}
                                         currencyPass={this.state.activeCurrency}
-                                        forceUpdate={this.props.forceUpdate}
+                                        forceUpdate={forceUpdate}
                                         overlayMode={true}
                                         turnOffOverlayBackground={() => this.setState({cartOverlayDisplayed: false})}
                                     />
